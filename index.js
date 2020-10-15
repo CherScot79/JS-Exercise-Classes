@@ -74,27 +74,28 @@ toString() {
 */
 
 class Car {
-constructor (model, milesPerGallon){
-  this.model = model;
-  this.milesPerGalllon = milesPerGallon;
-  this.tank = 0;
-  this.odometer = 0;
-}
-fill(gallons){
-  this.tank += gallons;
-}
-drive(distance){
-  let distanceDriven = this.tank * this.milesPerGalllon;
-  if(distanceDriven <= distance){
-    this.odometer += distanceDriven;
-    this.tank -= distanceDriven / this.milesPerGalllon;
-    return (`I ran out of fuel at ${this.odometer} miles!`);
-  } else {
-    this.odometer += distance;
-    this.tank -= distance / this.milesPerGalllon;
+  constructor(model, milesPerGallon) {
+    this.model = model
+    this.milesPerGallon = milesPerGallon
+    this.tank = 0
+    this.odometer = 0
+  };
+  fill(gals) {
+    this.tank = this.tank + gals
+  };
+  drive(distance) {
+    if (this.tank - (distance / this.milesPerGallon) > 0) {
+      this.tank = this.tank - (distance / this.milesPerGallon)
+      this.odometer = this.odometer + distance
+    } else {
+      this.odometer = this.odometer + this.tank * this.milesPerGallon
+      this.tank = 0
+      return (`I ran out of fuel at ${this.odometer} miles!`)
+    }
   }
 }
-}
+
+const bronc = new Car("Bronco", 13);
 
 /*
   TASK 3
@@ -118,7 +119,13 @@ speak(){
   return `Hello my name is ${this.name}, I am from ${this.location}`;
 }
 }
+const llama = new Lambdasian ({
+  name: "Larry",
+  age: 21,
+  location: "California"
+});
 
+console.log(llama.speak);
 /*
   TASK 4
     - Write an Instructor class extending Lambdasian.
@@ -133,10 +140,28 @@ speak(){
         + `demo` receives a `subject` string as an argument and returns the phrase 'Today we are learning about {subject}' where subject is the param passed in.
         + `grade` receives a `student` object and a `subject` string as arguments and returns '{student.name} receives a perfect score on {subject}'
 */
-class Instructor {
-
+class Instructor extends Lambdasian{
+  constructor(that){
+    super(that)
+    this.specialty = that.specialty,
+    this.favLanguage = that.favLanguage
+    this.catchphrase = that.catchphrase
+  };
+  demo (sub) {
+    return (`Today we are learning about ${sub}`)
+  };
+grade(student, subj) {
+  return (`${student.name} receives a perfect score on ${subj}`)
+  };
 }
-
+const rooCat = new Instructor({
+  name: "Rooster Cat";
+  age: 45,
+  location: "Iowa"'
+  specialty: "Debugging Codes",
+  favLanguage: "Python",
+  catchPhrase "It works and I don't know why....."
+})
 /*
   TASK 5
     - Write a Student class extending Lambdasian.
@@ -152,9 +177,33 @@ class Instructor {
         + `PRAssignment` a method that receives a subject as an argument and returns `student.name has submitted a PR for {subject}`
         + `sprintChallenge` similar to PRAssignment but returns `student.name has begun sprint challenge on {subject}`
 */
-class Student {
-
+class Student extends Lambdasian {
+  constructor(that) {
+    super(that);
+    this.previousBackground = that.previousBackground;
+    this.className = that.className;
+    this.favSubjects = that.favSubjects;
+  }
+  listSubjects() {
+    return `Loving ${this.favSubjects.toString()}`
+  };
+  PRAssignment(subject) {
+    return `${this.name} has submitted a PR for ${subject}`
+  }
+  sprintChallenge(subject) {
+    return `${this.name} has begun a sprint challenge on ${subject}`
+  }
 }
+
+const oldJewels = new Student({
+  name: "Jewels",
+  age: 59,
+  location: "Catopia",
+  previousBackground: "Foster Mom",
+  className: "Web37",
+  favSubjects: ["javascript", "python", "node", "Josh playing the bango"]
+});
+
 
 /*
   TASK 6
@@ -169,9 +218,30 @@ class Student {
         + `standUp` a method that takes in a slack channel and returns `{name} announces to {channel}, @channel standy times!`
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
-class ProjectManager {
-
+class ProjectManager extends Instructor {
+  constructor(that) {
+    super(that);
+    this.gradClassName = that.gradClassName;
+    this.favInstructor = that.favInstructor
+  }
+  standUp(channel) {
+    return `${this.name} announces to ${channel} "@channel, standy times"`
+  }
+  debugsCode(student, subject) {
+    return `${this.name} debugs ${student.name}'s code on ${subject}`
+  }
 }
+
+const badNaughtyZoot = new ProjectManager({
+  name: "Zoot",
+  age: 39,
+  location: "Castle Anthrax",
+  specialty: "Lighting the Grail shaped beaxon",
+  favLanguage: "Python",
+  catchPhrase: "There is but one punishment....",
+  gradClassName: "NPM Haters",
+  favInstructor: "Britt"
+})
 
 /*
   STRETCH PROBLEM (no tests!)
